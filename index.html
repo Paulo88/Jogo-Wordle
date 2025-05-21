@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Wordle</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <img src="img/tutorial.gif" alt="Como jogar" class="gif-explicativo">
+
+  <h1>🎯 Jogo de Palavras</h1>
+  <p>Digite uma palavra de 5 letras:</p>
+
+  <input type="text" id="guess" maxlength="5">
+  <div class="botoes">
+    <button onclick="checkGuess()">🎲 Enviar</button>
+    <button onclick="resetGame()">🔁 Reiniciar</button>
+    <button id="theme-toggle" onclick="toggleTheme()">🌓 Modo Escuro</button>
+  </div>
+
+  <div id="feedback"></div>
+  <div id="win-message"></div>
+
+  <!-- Lib externa do confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
