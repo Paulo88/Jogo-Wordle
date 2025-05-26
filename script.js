@@ -32,7 +32,6 @@ function checkGuess() {
     return;
   }
 
-  feedback.innerHTML = "";
   const resultado = document.createElement("div");
   resultado.classList.add("resultado-linha");
 
@@ -51,7 +50,9 @@ function checkGuess() {
     resultado.appendChild(letra);
   }
 
+  // Adiciona abaixo do que já existe (mantém histórico)
   feedback.appendChild(resultado);
+
   tentativas++;
 
   if (tentativa === palavraSecreta) {
