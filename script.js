@@ -21,6 +21,7 @@ function gerarDica(palavra) {
 
 // Atualiza o texto da dica na interface
 function atualizarDica() {
+  dicaAtual = gerarDica(palavraSecreta);
   dicaEl.textContent = `💡 Dica: ${dicaAtual}`;
 }
 
@@ -63,6 +64,7 @@ function checkGuess() {
   }
 }
 
+
 // Exibe mensagem de vitória e animação
 function finalizarVitoria() {
   mensagemVitoria.textContent = `🎉 Você acertou em ${tentativas} tentativa(s)!`;
@@ -76,7 +78,8 @@ function resetGame() {
   feedback.innerHTML = "";
   input.value = "";
   escolherPalavraAleatoria();
-  atualizarDica();
+  //atualizarDica(); // isso mostra a dica imediatamente
+  dicaEl.textContent = ""; // limpa a dica!
   input.focus();
 }
 
