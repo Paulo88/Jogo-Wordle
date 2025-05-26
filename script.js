@@ -1,76 +1,109 @@
-const secretWord = "sorte";
-const feedbackDiv = document.getElementById("feedback");
-const winMessage = document.getElementById("win-message");
-const themeToggle = document.getElementById("theme-toggle");
+const palavras = ["livro", "piano", "tigre", "verde", "nuvem", "cobra", "carta", "janela", "banco", "festa"];
+let palavraSecreta = "";
+let tentativas = 0;
+let dicaAtual = "";
 
-window.onload = function () {
-  const theme = localStorage.getItem("theme");
-  if (theme === "dark") {
-    document.body.classList.add("dark");
-    updateThemeButton(true);
-  } else {
-    updateThemeButton(false);
-  }
-};
+const input = document.getElementById("guess");
+const feedback = document.getElementById("feedback");
+const mensagemVitoria = document.getElementById("win-message");
+const dicaEl = document.getElementById("hint-message");
 
-function toggleTheme() {
-  const isDark = document.body.classList.toggle("dark");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-  updateThemeButton(isDark);
+// Escolhe uma palavra aleatória e gera a dica da letra revelada
+function escolherPalavraAleatoria() {
+  palavraSecreta = palavras[Math.floor(Math.random() * palavras.length)].toLowerCase();
+  dicaAtual = gerarDica(palavraSecreta);
 }
 
-function updateThemeButton(isDark) {
-  themeToggle.textContent = isDark ? "🌞 Modo Claro" : "🌙 Modo Escuro";
+// Gera dica com letra revelada aleatória da palavra secreta
+function gerarDica(palavra) {
+  return `Contém a letra: ${palavra[Math.floor(Math.random() * palavra.length)].toUpperCase()}`;
 }
 
+// Atualiza o texto da dica na interface
+function atualizarDica() {
+  dicaEl.textContent = `💡 Dica: ${dicaAtual}`;
+}
+
+// Verifica a tentativa do jogador e mostra resultado
 function checkGuess() {
-  const guessInput = document.getElementById("guess");
-  const guess = guessInput.value.toLowerCase();
-
-  if (guess.length !== 5) {
-    alert("A palavra deve ter 5 letras.");
+  const tentativa = input.value.toLowerCase();
+  if (tentativa.length !== 5) {
+    alert("Digite uma palavra com exatamente 5 letras.");
     return;
   }
 
-  const row = document.createElement("div");
+  feedback.innerHTML = "";
+  const resultado = document.createElement("div");
+  resultado.classList.add("resultado-linha");
 
   for (let i = 0; i < 5; i++) {
-    const letterDiv = document.createElement("div");
-    letterDiv.classList.add("letter");
-    letterDiv.textContent = guess[i];
+    const letra = document.createElement("span");
+    letra.classList.add("letter");
+    letra.textContent = tentativa[i].toUpperCase();
 
-    if (guess[i] === secretWord[i]) {
-      letterDiv.classList.add("correct");
-    } else if (secretWord.includes(guess[i])) {
-      letterDiv.classList.add("present");
+    if (tentativa[i] === palavraSecreta[i]) {
+      letra.classList.add("correct");
+    } else if (palavraSecreta.includes(tentativa[i])) {
+      letra.classList.add("present");
     } else {
-      letterDiv.classList.add("wrong");
+      letra.classList.add("wrong");
     }
-
-    row.appendChild(letterDiv);
+    resultado.appendChild(letra);
   }
 
-  feedbackDiv.appendChild(row);
-  guessInput.value = "";
+  feedback.appendChild(resultado);
+  tentativas++;
 
-  if (guess === secretWord) {
-    winMessage.textContent = "🎉 Parabéns! Você acertou a palavra!";
-    guessInput.disabled = true;
-    confettiCelebration();
+  if (tentativa === palavraSecreta) {
+    finalizarVitoria();
+  } else {
+    input.value = "";
+    input.focus();
   }
 }
 
+// Exibe mensagem de vitória e animação
+function finalizarVitoria() {
+  mensagemVitoria.textContent = `🎉 Você acertou em ${tentativas} tentativa(s)!`;
+  confetti();
+}
+
+// Reseta o jogo para uma nova rodada
 function resetGame() {
-  document.getElementById("guess").value = "";
-  document.getElementById("guess").disabled = false;
-  feedbackDiv.innerHTML = "";
-  winMessage.textContent = "";
+  tentativas = 0;
+  mensagemVitoria.textContent = "";
+  feedback.innerHTML = "";
+  input.value = "";
+  escolherPalavraAleatoria();
+  atualizarDica();
+  input.focus();
 }
 
-function confettiCelebration() {
-  confetti({
-    particleCount: 150,
-    spread: 100,
-    origin: { y: 0.6 }
-  });
+// Alterna visibilidade do modal de instruções
+function toggleHowToPlay() {
+  const modal = document.getElementById("how-to-play-modal");
+  modal.classList.toggle("hidden");
 }
+
+// Inicializa o jogo
+resetGame();
+
+function abrirComoJogar() {
+  const modal = document.getElementById("modal-como-jogar");
+  if (modal.style.display === "block") {
+    modal.style.display = "none";
+  } else {
+    modal.style.display = "block";
+  }
+}
+
+function fecharModal() {
+  document.getElementById("modal-como-jogar").style.display = "none";
+}
+
+// Adiciona suporte à tecla Enter para submeter a tentativa
+input.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    checkGuess();
+  }
+});
