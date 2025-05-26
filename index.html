@@ -10,17 +10,35 @@
   <img src="img/tutorial.gif" alt="Como jogar" class="gif-explicativo">
 
   <h1>🎯 Jogo de Palavras</h1>
-  <p>Digite uma palavra de 5 letras:</p>
 
-  <input type="text" id="guess" maxlength="5">
+  <label for="guess">Digite uma palavra de 5 letras:</label>
+  <input type="text" id="guess" maxlength="5" autocomplete="off">
+
   <div class="botoes">
     <button onclick="checkGuess()">🎲 Enviar</button>
     <button onclick="resetGame()">🔁 Reiniciar</button>
-    <button id="theme-toggle" onclick="toggleTheme()">🌓 Modo Escuro</button>
+    <button onclick="atualizarDica()">💡 Dica</button>
+    <button onclick="abrirComoJogar()">❓ Como Jogar</button>
   </div>
 
   <div id="feedback"></div>
   <div id="win-message"></div>
+  <div id="hint-message"></div>
+
+  <!-- Modal de instruções -->
+  <div id="modal-como-jogar" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-button" onclick="fecharModal()">&times;</span>
+      <h2>Como Jogar</h2>
+      <p>Você deve adivinhar uma palavra de 5 letras.</p>
+      <ul>
+        <li><strong>Verde</strong>: letra na posição correta</li>
+        <li><strong>Amarelo</strong>: letra na palavra, mas na posição errada</li>
+        <li><strong>Cinza</strong>: letra não existe na palavra</li>
+        <li>Use o botão “Dica” para revelar uma letra</li>
+      </ul>
+    </div>
+  </div>
 
   <!-- Lib externa do confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
